@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Parallax Map Scrolling Demo</title>
     <script type="text/javascript" src="modestmaps.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript">
@@ -11,7 +12,16 @@
         var subdomains = ['a', 'b', 'c'];
         var provider = new MM.TemplatedLayer(template, subdomains);
         map = new MM.Map('map', provider, undefined, []);
-        map.setCenterZoom(new MM.Location(41.5, -82.15), 9);
+        var center = new MM.Location(41.5, -82.15);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(recenterMap);
+        }
+        map.setCenterZoom(center, 9);
+      }
+
+      function recenterMap(position) {
+        var center = new MM.Location(position.coords.latitude, position.coords.longitude);
+        map.setCenterZoom(center, 9);
       }
 
       $(window).scroll(function(e) {
